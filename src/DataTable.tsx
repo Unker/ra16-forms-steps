@@ -9,6 +9,11 @@ interface DataTableProps {
   onEdit: (date: string) => void;
 }
 
+// Преобразуем значение в нужный формат "DD.MM.YYYY"
+const formatDate = (date: string): string => {
+  return date.split('-').reverse().join('.');
+};
+
 const DataTable: React.FC<DataTableProps> = ({ data, onDelete }) => {
   return (
     <table>
@@ -22,7 +27,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, onDelete }) => {
       <tbody>
         {data.map((row) => (
           <tr key={row.date}>
-            <td>{row.date}</td>
+            <td>{formatDate(row.date)}</td>
             <td>{row.distance}</td>
             <td>
               <button onClick={() => onDelete(row.date)}>✘</button>

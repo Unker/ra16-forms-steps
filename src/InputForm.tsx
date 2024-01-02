@@ -13,7 +13,11 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   };
 
   const handleDistanceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDistance(e.target.value);
+    if (e.target.value >= 0) {
+      setDistance(e.target.value);
+    } else {
+      setDistance(0);
+    }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
