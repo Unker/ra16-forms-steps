@@ -14,7 +14,13 @@ const formatDate = (date: string): string => {
   return date.split('-').reverse().join('.');
 };
 
-const DataTable: React.FC<DataTableProps> = ({ data, onDelete }) => {
+const sortByDate = (data: { date: string; distance: number }[]) => {
+  return data.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+};
+
+const DataTable: React.FC<DataTableProps> = ({ data, onDelete, onEdit }) => {
+  const sortedData = sortByDate(data);
+
   return (
     <table>
       <thead>
@@ -25,7 +31,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, onDelete }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
+        {sortedData.map((row) => (
           <tr key={row.date}>
             <td>{formatDate(row.date)}</td>
             <td>{row.distance}</td>

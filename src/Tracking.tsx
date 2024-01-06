@@ -29,11 +29,15 @@ const Tracking: React.FC = () => {
     setData(newData);
   };
 
+  const handleEdit = () => {
+    // todo
+  };
+
   return (
     <div className="container">
       <h1>Учёт тренировок</h1>
       <InputForm onSubmit={handleSubmit} />
-      <DataTable data={data} onDelete={handleDelete} />
+      <DataTable data={data} onDelete={handleDelete} onEdit={handleEdit}/>
     </div>
   );
 };
