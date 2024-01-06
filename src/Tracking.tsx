@@ -10,18 +10,30 @@ interface DataItem {
 
 const Tracking: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([]);
+  const [editingItem, setEditingItem] = useState<DataItem | null>(null);
 
   const handleSubmit = (date: string, distance: number) => {
-    const existingItem = data.find((item) => item.date === date);
-
-    if (existingItem) {
-      const newData = data.map((item) =>
-        item.date === date ? { ...item, distance: item.distance + distance } : item
+    if (editingItem) {
+      // Редактирование существующей записи
+      const updatedData = data.map((item) =>
+        item.date === editingItem.date ? { ...item, date, distance } : item
       );
-      setData(newData);
+      setData(updatedData);
+      setEditingItem(null);
     } else {
-      setData([...data, { date, distance }]);
+      // Добавление новой записи
+      const existingItem = data.find((item) => item.date === date);
+
+      if (existingItem) {
+        const newData = data.map((item) =>
+          item.date === date ? { ...item, distance: item.distance + distance } : item
+        );
+        setData(newData);
+      } else {
+        setData([...data, { date, distance }]);
+      }
     }
+
   };
 
   const handleDelete = (date: string) => {
@@ -29,14 +41,17 @@ const Tracking: React.FC = () => {
     setData(newData);
   };
 
-  const handleEdit = () => {
-    // todo
+  const handleEdit = (date: string) => {
+    const itemToEdit = data.find((item) => item.date === date);
+    if (itemToEdit) {
+      setEditingItem(itemToEdit);
+    }
   };
 
   return (
     <div className="container">
       <h1>Учёт тренировок</h1>
-      <InputForm onSubmit={handleSubmit} />
+      <InputForm data={editingItem} onSubmit={handleSubmit} />
       <DataTable data={data} onDelete={handleDelete} onEdit={handleEdit}/>
     </div>
   );

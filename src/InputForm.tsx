@@ -1,22 +1,35 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+
+interface DataItem {
+  date: string;
+  distance: number;
+}
 
 interface InputFormProps {
+  data: DataItem | null;
   onSubmit: (date: string, distance: number) => void;
 }
 
-const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
+const InputForm: React.FC<InputFormProps> = ({ data, onSubmit }) => {
   const [date, setDate] = useState('');
   const [distance, setDistance] = useState('');
 
+  useEffect(() => {
+    // Обновляем состояние при изменении внешних данных
+    if (data) {
+      setDate(data.date);
+      setDistance(data.distance.toString());
+    }
+  }, [data]);
+  
   const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);
   };
 
   const handleDistanceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (Number(e.target.value) >= 0) {
-      setDistance(e.target.value);
-    } else {
-      setDistance('0');
+    const value = e.target.value;
+    if (Number(value) >= 0) {
+      setDistance(value);
     }
   };
 
